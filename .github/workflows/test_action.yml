@@ -10,8 +10,15 @@ jobs:
       image: rockylinux:8.8
       options: --cpus 1
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: print release version
         run: cat /etc/redhat-release
       - name: print repository file
         run: ls -al
-    
+      - name: Print working directory
+        run: pwd
+      - name: Print tag
+        run: echo ${{ github.ref }}
+      - name: Install dependencies
+        run: sh ./install_dependencies.sh
