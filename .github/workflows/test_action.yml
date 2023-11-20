@@ -1,0 +1,17 @@
+name: test_action
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  container_test_job:
+    runs-on: ubuntu-latest
+    container:
+      image: rockylinux:8.8
+      options: --cpus 1
+    steps:
+      - name: print release version
+        run: cat /etc/redhat-release
+      - name: print repository file
+        run: ls -al
+    
