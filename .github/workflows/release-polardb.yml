@@ -45,8 +45,14 @@ jobs:
       - name: Copy lib dependencies
         run: |
           mkdir /tmp/dependencies
-          cp /usr/lib64/libssl.so.1.1 /tmp/dependencies
-          cp /usr/lib64/libcrypto.so.1.1 /tmp/dependencies
+          cd /tmp
+          wget https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz -O /tmp/openssl-1.1.1w.tar.gz
+          tar -xzf openssl-1.1.1w.tar.gz
+          cd openssl-1.1.1w
+          ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
+          make && make install          
+          cp ./libssl.so.1.1 /tmp/dependencies
+          cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
       - name: Checkout
         uses: actions/checkout@v2
