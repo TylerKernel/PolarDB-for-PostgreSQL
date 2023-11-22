@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get the polardb version
         id: get_version
-        run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
       - name: Build ZLog
         run: |
           mkdir /tmp/zlog_build
@@ -50,7 +50,7 @@ jobs:
           tar -xzf openssl-1.1.1w.tar.gz
           cd openssl-1.1.1w
           ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
-          make && make install          
+          make          
           cp ./libssl.so.1.1 /tmp/dependencies
           cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
