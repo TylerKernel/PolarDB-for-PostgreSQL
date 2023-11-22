@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get the polardb version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: echo "::set-output name=VERSION::${GITHUB_REF#refs/tags/}"
       - name: Build ZLog
         run: |
           mkdir /tmp/zlog_build
