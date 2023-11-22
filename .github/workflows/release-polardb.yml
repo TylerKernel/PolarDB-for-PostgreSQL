@@ -32,7 +32,7 @@ jobs:
           wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz -O /tmp/pfsd4pg-release-1.2.42-20220419.tar.gz
           tar -xzf pfsd4pg-release-1.2.42-20220419.tar.gz
           cd PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419
-          ./pfs_build.sh
+          ./autobuild.sh
           cp -r bin /tmp/pfs_build
           cp -r conf /tmp/pfs_build
           cp -r deploy_scripts /tmp/pfs_build
