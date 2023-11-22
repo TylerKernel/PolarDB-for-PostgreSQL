@@ -55,15 +55,13 @@ jobs:
           cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
+        uses: actions/checkout@v2
       - name: Build PolarDB
         run: |
-          bash
+          source /etc/bashrc
           mkdir /tmp/polardb_build
-          su - postgres -c "./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx"
-          su - postgres -c "make && make install"
+          ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx
+          make && make install
           tar -czf /tmp/polardb_build.tar /tmp/polardb_build
       - name: Write insall script
         run: |
