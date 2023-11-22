@@ -27,6 +27,7 @@ jobs:
           cp /usr/local/lib/libzlog.a /tmp/zlog_build
       - name: Build PFS
         run: |
+          sudo su
           mkdir /tmp/pfs_build
           cd /tmp
           wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz -O /tmp/pfsd4pg-release-1.2.42-20220419.tar.gz
