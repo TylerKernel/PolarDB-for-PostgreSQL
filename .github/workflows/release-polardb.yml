@@ -15,6 +15,7 @@ jobs:
         run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
       - name: Build ZLog
         run: |
+          sudo su
           mkdir /tmp/zlog_build
           cd /tmp
           wget https://github.com/HardySimpson/zlog/archive/refs/tags/1.2.16.tar.gz -O /tmp/zlog-1.2.16.tar.gz
@@ -43,6 +44,7 @@ jobs:
           cp -r uninstall.sh /tmp/pfs_build
       - name: Copy lib dependencies
         run: |
+          sudo su
           mkdir /tmp/dependencies
           cp /usr/lib64/libssl.so.1.1 /tmp/dependencies
           cp /usr/lib64/libcrypto.so.1.1 /tmp/dependencies
@@ -51,6 +53,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build PolarDB
         run: |
+          sudo su
           mkdir /tmp/polardb_build
           ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx
           make
