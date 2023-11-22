@@ -59,10 +59,11 @@ jobs:
       - name: Build PolarDB
         run: |
           source /etc/bashrc
+          sour
           mkdir /tmp/polardb_build
 
-          sudo su - postgres -c "$PWD/polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx"
-          sudo su - postgres -c "cd $PWD && make && make install"
+          sudo su - postgres -c "cd $PWD && sudo ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx"
+          sudo su - postgres -c "cd $PWD && sudo make && sudo make install"
           tar -czf /tmp/polardb_build.tar /tmp/polardb_build
       - name: Write insall script
         run: |
