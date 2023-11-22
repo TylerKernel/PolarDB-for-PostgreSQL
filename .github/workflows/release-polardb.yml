@@ -33,14 +33,14 @@ jobs:
           tar -xzf pfsd4pg-release-1.2.42-20220419.tar.gz
           cd PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419
           ./autobuild.sh
-          cp -r ./bin /tmp/pfs_build
-          cp -r ./conf /tmp/pfs_build
-          cp -r ./deploy_scripts /tmp/pfs_build
-          cp -r ./etc /tmp/pfs_build
-          cp -r ./install.sh /tmp/pfs_build
-          cp -r ./lib /tmp/pfs_build
-          cp -r ./src /tmp/pfs_build
-          cp -r ./uninstall.sh /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/bin /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/conf /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/deploy_scripts /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/etc /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/install.sh /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/lib /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/src /tmp/pfs_build
+          cp -r /tmp/PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419/uninstall.sh /tmp/pfs_build
       - name: Copy lib dependencies
         run: |
           mkdir /tmp/dependencies
