@@ -55,7 +55,9 @@ jobs:
           cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - name: Build PolarDB
         run: |
           sudo su
