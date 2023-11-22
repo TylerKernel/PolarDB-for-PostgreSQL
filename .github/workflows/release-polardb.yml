@@ -8,11 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: polardb/polardb_pg_devel:centos7
-      options: --entrypoint /bin/bash
+      options: --entrypoint /bin/bash --user root
     steps:
       - name: Get the polardb version
         id: get_version
-        run: echo "::set-output name=VERSION::${GITHUB_REF#refs/tags/}"
+        run: |
+          echo "::set-output name=VERSION::${GITHUB_REF#refs/tags/}"
+          whoami
       - name: Checkout
         uses: actions/checkout@v3
         with:
