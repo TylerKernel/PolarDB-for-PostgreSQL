@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir /tmp/zlog_build
           cd /tmp
-          wget https://github.com/HardySimpson/zlog/archive/refs/tags/1.2.16.tar.gz
+          wget https://github.com/HardySimpson/zlog/archive/refs/tags/1.2.16.tar.gz -O /tmp/zlog-1.2.16.tar.gz
           tar -xzf zlog-1.2.16.tar.gz
           cd zlog-1.2.16
           make && make install
@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir /tmp/pfs_build
           cd /tmp
-          wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz
+          wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz -O /tmp/pfsd4pg-release-1.2.42-20220419.tar.gz
           tar -xzf pfsd4pg-release-1.2.42-20220419.tar.gz
           cd PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419
           ./pfs_build.sh
