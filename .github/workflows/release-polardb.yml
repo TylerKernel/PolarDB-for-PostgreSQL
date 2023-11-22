@@ -59,7 +59,6 @@ jobs:
       - name: Build PolarDB
         run: |
           source /etc/bashrc
-          sour
           mkdir /tmp/polardb_build
 
           sudo su - postgres -c "cd $PWD && sudo ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx"
