@@ -61,6 +61,7 @@ jobs:
       - name: Build PolarDB
         run: |
           bash
+          su - postgres
           mkdir /tmp/polardb_build
           ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx
           make
