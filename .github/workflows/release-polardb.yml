@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: polardb/polardb_pg_devel:centos7
-      options: --cpus 1
+      options: --entrypoint /bin/bash
     steps:
       - name: Get the polardb version
         id: get_version
@@ -55,7 +55,7 @@ jobs:
           cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build PolarDB
         run: |
           sudo su
