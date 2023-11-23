@@ -152,6 +152,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /tmp/polardb-11.9-${{ steps.get_version.outputs.VERSION }}.tar.gz
-          asset_name: polardb-${{ steps.get_version.outputs.VERSION }}.tar.gz
-          asset_content_type: application/gzip
+          asset_path: /tmp/polardb-11.9-${{ steps.get_version.outputs.VERSION }}.tar.xz
+          asset_name: polardb-${{ steps.get_version.outputs.VERSION }}.tar.xz
+          asset_content_type: application/x-xz
