@@ -27,8 +27,6 @@ jobs:
           cp /usr/local/lib/libzlog.a /tmp/zlog_build
       - name: Build PFS
         run: |
-          ls -l /tmp/zlog_build
-          exit 1
           source /etc/bashrc
           mkdir /tmp/pfs_build
           cd /tmp
@@ -64,7 +62,8 @@ jobs:
           mkdir /tmp/polardb_build
 
           ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --withpx --noinit
-          tar -czf /tmp/polardb_build.tar /tmp/polardb_build
+          cd /tmp
+          tar -cf polardb_build.tar polardb_build
       - name: Write insall script
         run: |
           cat << EOF > /tmp/install.sh
@@ -131,7 +130,9 @@ jobs:
           cp -r /tmp/dependencies /tmp/polardb_tar/dependencies/libs
           cp /tmp/install.sh /tmp/polardb_tar
           chmod +x /tmp/polardb_tar/install.sh
-          tar -czf /tmp/polardb-${{ steps.get_version.outputs.VERSION }}.tar.gz /tmp/polardb_tar
+          cd /tmp
+          tar -cf polardb-11.9-${{ steps.get_version.outputs.VERSION }}.tar polardb_tar
+          xz polardb-11.9-${{ steps.get_version.outputs.VERSION }}.tar
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -151,6 +152,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}.tar.gz
+          asset_path: /tmp/polardb-11.9-${{ steps.get_version.outputs.VERSION }}.tar.gz
           asset_name: polardb-${{ steps.get_version.outputs.VERSION }}.tar.gz
           asset_content_type: application/gzip
