@@ -65,10 +65,10 @@ jobs:
 
           ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --withpx --noinit
           cd /tmp
-          tar -cf polardb_build.tar polardb_build
+          tar -cf polardb.tar polardb_build
       - name: Write insall script
         run: |
-          cat << EOF > /tmp/install.sh
+          cat << 'EOF' > /tmp/install.sh
           #!/bin/bash
 
           date=$(date +%Y%m%d)
@@ -126,7 +126,7 @@ jobs:
       - name: Tar PolarDB
         run: |
           mkdir -p /tmp/polardb_tar/dependencies
-          cp /tmp/polardb_build.tar /tmp/polardb_tar
+          cp /tmp/polardb.tar /tmp/polardb_tar
           cp -r /tmp/zlog_build /tmp/polardb_tar/dependencies/zlog-1.2.16
           cp -r /tmp/pfs_build /tmp/polardb_tar/dependencies/pfs-1.2.42
           cp -r /tmp/dependencies /tmp/polardb_tar/dependencies/libs
