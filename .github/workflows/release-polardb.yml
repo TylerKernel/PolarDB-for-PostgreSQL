@@ -42,7 +42,7 @@ jobs:
           cp -r lib /tmp/pfs_build
           cp -r src /tmp/pfs_build
           cp -r uninstall.sh /tmp/pfs_build
-      - name: Copy lib dependencies
+      - name: Build openSSL
         run: |
           mkdir /tmp/dependencies
           cd /tmp
@@ -50,7 +50,7 @@ jobs:
           tar -xzf openssl-1.1.1w.tar.gz
           cd openssl-1.1.1w
           ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
-          make          
+          make && make install
           cp ./libssl.so.1.1 /tmp/dependencies
           cp ./libcrypto.so.1.1 /tmp/dependencies
           cp /lib64/libxerces-c-3.1.so /tmp/dependencies
@@ -61,8 +61,7 @@ jobs:
           source /etc/bashrc
           mkdir /tmp/polardb_build
 
-          sudo su - postgres -c "cd $PWD && sudo ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --initpx"
-          sudo su - postgres -c "cd $PWD && sudo make && sudo make install"
+          ./polardb_build.sh --basedir=/tmp/polardb_build --with-pfsd --withpx --noinit
           tar -czf /tmp/polardb_build.tar /tmp/polardb_build
       - name: Write insall script
         run: |
