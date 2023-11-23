@@ -27,6 +27,8 @@ jobs:
           cp /usr/local/lib/libzlog.a /tmp/zlog_build
       - name: Build PFS
         run: |
+          ls -l /tmp/zlog_build
+          exit 1
           source /etc/bashrc
           mkdir /tmp/pfs_build
           cd /tmp
