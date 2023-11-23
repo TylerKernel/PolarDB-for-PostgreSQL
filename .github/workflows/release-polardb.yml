@@ -135,6 +135,10 @@ jobs:
           cd /tmp
           tar -cf polardb-${{ steps.get_version.outputs.VERSION }}.tar polardb_tar
           xz polardb-${{ steps.get_version.outputs.VERSION }}.tar
+      - name: Get tag message
+        id: get_tag_message
+        run: |
+          echo "::set-output name=TAG_MESSAGE::$(git tag -l -n99 --format='%(contents)' ${{ steps.get_version.outputs.VERSION }})"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -145,6 +149,8 @@ jobs:
           release_name: PolarDB ${{ steps.get_version.outputs.VERSION }}
           body: |
             PolarDB ${{ steps.get_version.outputs.VERSION }}
+
+            ${{ steps.get_tag_message.outputs.TAG_MESSAGE }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
