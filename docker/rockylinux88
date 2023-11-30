@@ -1,0 +1,47 @@
+FROM rockylinux:8.8
+
+WORKDIR /opt
+
+# Install packages
+RUN dnf makecache && \
+    dnf install -y epel-release && \
+    dnf -y install \
+        libicu-devel pam-devel readline-devel \
+        libxml2-devel libxslt-devel openldap \
+        openldap-devel openldap-clients libuuid-devel \
+        xerces-c-devel bison flex gettext tcl-devel \
+        python3-devel perl-Test-Simple perl-DBD-Pg \
+        perl-ExtUtils-Embed perl-ExtUtils-MakeMaker zlib-devel \
+        krb5-devel krb5-workstation krb5-server lcov \
+        psmisc libaio-devel fuse-devel cmake wget \
+        perl-Pod-Html xz gcc-c++ \
+        globus-gssapi-gsi globus-gssapi-gsi-devel && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Install zlog
+RUN cd /opt && \
+    wget https://github.com/HardySimpson/zlog/archive/refs/tags/1.2.16.tar.gz && \
+    tar -xvf 1.2.16.tar.gz && \
+    cd zlog-1.2.16 && \
+    make && make install && \
+    cd .. && rm -rf zlog-1.2.16 && rm -f 1.2.16.tar.gz
+
+# Install pfsd
+RUN cd /opt && \
+    wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz && \
+    tar xf pfsd4pg-release-1.2.42-20220419.tar.gz && \
+    cd PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419 && \
+    ./autobuild.sh && \
+    ./install.sh && \
+    cd .. && rm -rf PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419 && rm -f pfsd4pg-release-1.2.42-20220419.tar.gz
+
+# Install llvm11
+RUN cd /opt && \
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-project-11.0.0.tar.xz && \
+    tar xf llvm-project-11.0.0.tar.xz && \
+    cd llvm-project-11.0.0 && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" -G "Unix Makefiles" ../llvm && \
+    make && make install && \
+    cd ../.. && rm -rf llvm-project-11.0.0 && rm -f llvm-project-11.0.0.tar.xz
