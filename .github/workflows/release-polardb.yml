@@ -133,36 +133,13 @@ jobs:
           cp /tmp/install.sh /tmp/polardb_tar
           chmod +x /tmp/polardb_tar/install.sh
           cd /tmp
-          tar -cf polardb-${{ steps.get_version.outputs.VERSION }}.tar polardb_tar
-          xz polardb-${{ steps.get_version.outputs.VERSION }}.tar
-      - name: Get tag message
-        id: get_tag_message
-        run: |
-          echo "::set-output name=TAG_MESSAGE::$(git tag -l -n99 --format='%(contents)' ${{ steps.get_version.outputs.VERSION }})"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tar -cf polardb-${{ steps.get_version.outputs.VERSION }}-el7.tar polardb_tar
+          xz polardb-${{ steps.get_version.outputs.VERSION }}-el7.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: PolarDB ${{ steps.get_version.outputs.VERSION }}
-          body: |
-            PolarDB ${{ steps.get_version.outputs.VERSION }}
-
-            ${{ steps.get_tag_message.outputs.TAG_MESSAGE }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}.tar.xz
-          asset_name: polardb-11.9-${{ steps.get_version.outputs.VERSION }}-el7.tar.xz
-          asset_content_type: application/x-xz
+          name: polardb-${{ steps.get_version.outputs.VERSION }}
+          path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}-el7.tar.xz
   
   build_polardb_and_pfs_on_rockylinux8:
     runs-on: ubuntu-latest
@@ -281,12 +258,25 @@ jobs:
           cp /tmp/install.sh /tmp/polardb_tar
           chmod +x /tmp/polardb_tar/install.sh
           cd /tmp
-          tar -cf polardb-${{ steps.get_version.outputs.VERSION }}.tar polardb_tar
-          xz polardb-${{ steps.get_version.outputs.VERSION }}.tar
-      - name: Get tag message
-        id: get_tag_message
-        run: |
-          echo "::set-output name=TAG_MESSAGE::$(git tag -l -n99 --format='%(contents)' ${{ steps.get_version.outputs.VERSION }})"
+          tar -cf polardb-${{ steps.get_version.outputs.VERSION }}-el8.tar polardb_tar
+          xz polardb-${{ steps.get_version.outputs.VERSION }}-el8.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: polardb-${{ steps.get_version.outputs.VERSION }}
+          path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}-el8.tar.xz
+  create-release:
+    needs: [build_polardb_and_pfs_on_centos7, build_polardb_and_pfs_on_rockylinux8]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the polardb version
+        id: get_version
+        run: echo "::set-output name=VERSION::${GITHUB_REF#refs/tags/}"
+      - name: Download all workflow artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: polardb-${{ steps.get_version.outputs.VERSION }}
+          path: /tmp
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -301,13 +291,23 @@ jobs:
             ${{ steps.get_tag_message.outputs.TAG_MESSAGE }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload EL8 Release Asset
+        id: upload-release-asset-el8
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}.tar.xz
+          asset_path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}-el8.tar.xz
           asset_name: polardb-11.9-${{ steps.get_version.outputs.VERSION }}-el8.tar.xz
+          asset_content_type: application/x-xz
+      - name: Upload EL7 Release Asset
+        id: upload-release-asset-el7
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /tmp/polardb-${{ steps.get_version.outputs.VERSION }}-el7.tar.xz
+          asset_name: polardb-11.9-${{ steps.get_version.outputs.VERSION }}-el7.tar.xz
           asset_content_type: application/x-xz
