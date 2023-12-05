@@ -1,0 +1,38 @@
+FROM rockylinux:9.3
+
+WORKDIR /opt
+
+# Install packages
+RUN dnf makecache && \
+    dnf install -y epel-release && \
+    dnf --enablerepo=crb install -y fuse-devel && \
+    dnf -y install \
+        libicu-devel pam-devel readline-devel \
+        libxml2-devel libxslt-devel openldap \
+        openldap-devel openldap-clients libuuid-devel \
+        xerces-c-devel bison flex gettext tcl-devel \
+        python3-devel perl-Test-Simple perl-DBD-Pg \
+        perl-ExtUtils-Embed perl-ExtUtils-MakeMaker zlib-devel \
+        krb5-devel krb5-workstation krb5-server lcov \
+        psmisc libaio-devel cmake wget \
+        perl-Pod-Html xz gcc-c++ \
+        clang clang-devel openssl-devel perl-Opcode llvm llvm-devel && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Install zlog
+RUN cd /opt && \
+    wget https://github.com/HardySimpson/zlog/archive/refs/tags/1.2.16.tar.gz && \
+    tar -xvf 1.2.16.tar.gz && \
+    cd zlog-1.2.16 && \
+    make && make install && \
+    cd .. && rm -rf zlog-1.2.16 && rm -f 1.2.16.tar.gz
+
+# Install pfsd
+RUN cd /opt && \
+    wget https://github.com/ApsaraDB/PolarDB-FileSystem/archive/refs/tags/pfsd4pg-release-1.2.42-20220419.tar.gz && \
+    tar xf pfsd4pg-release-1.2.42-20220419.tar.gz && \
+    cd PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419 && \
+    ./autobuild.sh && \
+    ./install.sh && \
+    cd .. && rm -rf PolarDB-FileSystem-pfsd4pg-release-1.2.42-20220419 && rm -f pfsd4pg-release-1.2.42-20220419.tar.gz
