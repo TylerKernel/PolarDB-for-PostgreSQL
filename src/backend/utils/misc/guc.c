@@ -612,8 +612,10 @@ const struct config_enum_entry data_encryption_cipher_options[] = {
 	{"off",		TDE_ENCRYPTION_OFF, false},
 	{"aes-128", TDE_ENCRYPTION_AES_128, false},
 	{"aes-256", TDE_ENCRYPTION_AES_256, false},
+#if OPENSSL_VERSION_NUMBER >= 0x10101000L
 #ifndef OPENSSL_NO_SM4
 	{"sm4",		TDE_ENCRYPTION_SM4, false},
+#endif
 #endif
 	{NULL, 0, false}
 };
@@ -669,6 +671,7 @@ int polar_max_hashagg_mem = 0;
 int polar_max_setop_mem = 0;
 int polar_max_subplan_mem = 0;
 int polar_max_recursiveunion_mem = 0;
+int polar_wait_before_shutdown_timeout = 0;
 
 static const struct config_enum_entry client_schedule_options[] = {
 	{"round-robin", CLIENT_SCHEDULE_ROUND_ROBIN, false},
@@ -848,8 +851,6 @@ int     polar_max_auditlog_files;
 int     polar_max_slowlog_files;
 int     polar_max_logindex_files;
 int 	polar_trace_logindex_messages = LOG;
-bool	polar_enable_log_search_path = true;
-bool	polar_enable_log_parameter_type = true;
 
 /*
  * Forbidden functions names for non-superuser
@@ -3847,27 +3848,6 @@ static struct config_bool ConfigureNamesBool[] =
 		NULL, NULL, NULL
 	},
 
-	{
-		{"polar_enable_log_search_path", PGC_SIGHUP, DEVELOPER_OPTIONS,
-			gettext_noop("enable log search_path to log file."),
-			NULL,
-			GUC_NO_SHOW_ALL | GUC_NO_RESET_ALL
-		},
-		&polar_enable_log_search_path,
-		true,
-		NULL, NULL, NULL
-	},
-	{
-		{"polar_enable_log_parameter_type", PGC_SIGHUP, LOGGING,
- 			gettext_noop("Enable polar log SQL parameter type."),
- 			NULL,
-			GUC_NO_SHOW_ALL | GUC_NO_RESET_ALL
- 		},
- 		&polar_enable_log_parameter_type,
-		true,
-		NULL, NULL, NULL
-	},
-
 	/* End-of-list marker */
 	{
 		{NULL, 0, 0, NULL, NULL}, NULL, false, NULL, NULL, NULL
@@ -6854,6 +6834,17 @@ static struct config_int ConfigureNamesInt[] =
 #endif
 	/* POLAR end */
 
+	{
+		{"polar_wait_before_shutdown_timeout", PGC_SIGHUP, UNGROUPED,
+			gettext_noop("PolarDB wait before shutdown timeout, in seconds."),
+			gettext_noop("0 means no wait.")
+			/* thought the unit is GUC_UNIT_S, to parse it conveniently, we remove it */
+		},
+		&polar_wait_before_shutdown_timeout,
+		0, 0, 300,
+		NULL, NULL, NULL
+	},
+
 	/* End-of-list marker */
 	{
 		{NULL, 0, 0, NULL, NULL}, NULL, 0, 0, 0, NULL, NULL, NULL
@@ -7839,7 +7830,7 @@ static struct config_string ConfigureNamesString[] =
 			GUC_NOT_IN_SAMPLE | GUC_DISALLOW_IN_FILE
 		},
 		&polar_release_date,
-		"20211231",
+		"20240430",
 		NULL, NULL, NULL
 	},
 

@@ -284,7 +284,6 @@ int			px_wait_lock_timeout = 0;
 /* POLAR */
 static bool px_check_dispatch_log_stats(bool *newval, void **extra, GucSource source);
 static bool px_check_scan_unit_size(int *newval, void **extra, GucSource source);
-static const char* px_show_scan_unit_size(void);
 static bool px_check_ignore_function(char **newval, void **extra, GucSource source);
 static void px_assign_ignore_function(const char *newval, void *extra);
 static int px_guc_array_compare(const void *a, const void *b);
@@ -1964,6 +1963,16 @@ struct config_bool ConfigureNamesBool_px[] =
 	},
 
 	{
+		{"polar_px_use_master", PGC_USERSET, UNGROUPED,
+			gettext_noop("Whether PolarDB PX use master"),
+			NULL
+		},
+		&px_use_master,
+		false,
+		NULL, (void (*)(bool, void *))polar_invalid_px_nodes_cache, NULL
+	},
+
+	{
 		{"polar_px_use_standby", PGC_USERSET, UNGROUPED,
 			gettext_noop("Whether PolarDB PX use standby"),
 			NULL
@@ -2491,7 +2500,7 @@ struct config_int ConfigureNamesInt_px[] =
 		},
 		&px_scan_unit_size,
 		512, 1, 1024,
-		px_check_scan_unit_size, NULL, px_show_scan_unit_size
+		px_check_scan_unit_size, NULL, NULL
 	},
 
 	{
@@ -2781,15 +2790,6 @@ px_check_scan_unit_size(int *newval, void **extra, GucSource source)
 	}
 
 	return true;
-}
-
-static const char*
-px_show_scan_unit_size(void)
-{
-	static char nbuf[120];
-	snprintf(nbuf, sizeof(nbuf), "scan_unit_size: %d, scan_unit_bit: %d",
-		px_scan_unit_size, px_scan_unit_bit);
-	return nbuf;
 }
 
 static bool

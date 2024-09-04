@@ -28,7 +28,7 @@ export const zh: SidebarConfig = {
               ],
             },
             {
-              text: "部署 PolarDB 数据库",
+              text: "部署 PolarDB-PG 数据库",
               children: [
                 "/zh/deploying/db-localfs.md",
                 "/zh/deploying/db-pfs.md",
@@ -76,7 +76,7 @@ export const zh: SidebarConfig = {
   ],
   "/zh/features": [
     {
-      text: "内核增强功能",
+      text: "自研功能",
       link: "/zh/features/",
       children: [
         {
@@ -120,6 +120,14 @@ export const zh: SidebarConfig = {
                 "/zh/features/v11/epq/adaptive-scan.md",
                 "/zh/features/v11/epq/parallel-dml.md",
                 "/zh/features/v11/epq/epq-ctas-mtview-bulk-insert.md",
+              ],
+            },
+            {
+              text: "第三方插件",
+              link: "/zh/features/v11/extensions/",
+              children: [
+                "/zh/features/v11/extensions/pgvector.md",
+                "/zh/features/v11/extensions/smlar.md",
               ],
             },
           ],
@@ -167,6 +175,7 @@ export const zh: SidebarConfig = {
         "/zh/contributing/contributing-polardb-kernel.md",
         "/zh/contributing/contributing-polardb-docs.md",
         "/zh/contributing/coding-style.md",
+        "/zh/contributing/trouble-issuing.md",
       ],
     },
   ],

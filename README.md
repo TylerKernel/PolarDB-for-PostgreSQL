@@ -1,6 +1,6 @@
 <div align="center">
 
-[![logo](docs/.vuepress/public/images/polardb.png)](https://developer.aliyun.com/topic/polardb-for-pg)
+[![logo](docs/.vuepress/public/images/polardb.png)](https://www.polardbpg.com/home)
 
 # PolarDB for PostgreSQL
 
@@ -8,7 +8,7 @@
 
 #### English | [简体中文](README-CN.md)
 
-[![official](https://img.shields.io/badge/official%20site-blueviolet?style=for-the-badge&logo=alibabacloud)](https://developer.aliyun.com/topic/polardb-for-pg)
+[![official](https://img.shields.io/badge/official%20site-blueviolet?style=for-the-badge&logo=alibabacloud)](https://www.polardbpg.com/home)
 
 [![cirrus-ci-stable](https://img.shields.io/cirrus/github/ApsaraDB/PolarDB-for-PostgreSQL/POLARDB_11_STABLE?style=for-the-badge&logo=cirrusci)](https://cirrus-ci.com/github/ApsaraDB/PolarDB-for-PostgreSQL/POLARDB_11_STABLE)
 [![cirrus-ci-dev](https://img.shields.io/cirrus/github/ApsaraDB/PolarDB-for-PostgreSQL/POLARDB_11_DEV?style=for-the-badge&logo=cirrusci)](https://cirrus-ci.com/github/ApsaraDB/PolarDB-for-PostgreSQL/POLARDB_11_DEV)
@@ -46,7 +46,7 @@ The `POLARDB_11_STABLE` is the stable branch based on PostgreSQL 11.9, which sup
 
 ## Architecture and Roadmap
 
-PolarDB uses a shared-storage-based architecture in which computing is decoupled from storage. The conventional shared-nothing architecture is changed to the shared-storage architecture. N copies of data in the compute cluster and N copies of data in the storage cluster are changed to N copies of data in the compute cluster and one copy of data in the storage cluster. The shared storage stores one copy of data, but the data states in memory are different. The WAL logs must be synchronized from the primary node to read-only nodes to ensure data consistency. In addition, when the primary node flushes dirty pages, it must be controlled to prevent the read-only nodes from reading future pages. Meanwhile, the read-only nodes must be prevented from reading the outdated pages that are not correctly replayed in memory. To resolve this issue, PolarDB provides the index structure _LogIndex_ to maintain the page replay history. LogIndex can be used to synchronize data from the primary node to read-only nodes.
+PolarDB for PostgreSQL uses a shared-storage-based architecture in which computing is decoupled from storage. The conventional shared-nothing architecture is changed to the shared-storage architecture. N copies of data in the compute cluster and N copies of data in the storage cluster are changed to N copies of data in the compute cluster and one copy of data in the storage cluster. The shared storage stores one copy of data, but the data states in memory are different. The WAL logs must be synchronized from the primary node to read-only nodes to ensure data consistency. In addition, when the primary node flushes dirty pages, it must be controlled to prevent the read-only nodes from reading future pages. Meanwhile, the read-only nodes must be prevented from reading the outdated pages that are not correctly replayed in memory. To resolve this issue, PolarDB provides the index structure _LogIndex_ to maintain the page replay history. LogIndex can be used to synchronize data from the primary node to read-only nodes.
 
 After computing is decoupled from storage, the I/O latency and throughput increase. When a single read-only node is used to process analytical queries, the CPUs, memory, and I/O of other read-only nodes and the large storage I/O bandwidth cannot be fully utilized. To resolve this issue, PolarDB provides the shared-storage-based MPP engine. The engine can use CPUs to accelerate analytical queries at SQL level and support a mix of OLAP workloads and OLTP workloads for HTAP.
 
@@ -54,15 +54,14 @@ For more information, see [Architecture](https://apsaradb.github.io/PolarDB-for-
 
 ## Quick Start with PolarDB
 
-If you have Docker installed already，then you can pull the instance image of PolarDB for PostgreSQL based on local storage. Create, run and enter the container, and use PolarDB instance directly:
+If you have Docker installed already，then you can pull the instance image of PolarDB-PG based on local storage. Create, run and enter the container, and use PolarDB-PG instance directly:
 
 ```bash
-# pull the instance image from DockerHub
-docker pull polardb/polardb_pg_local_instance:single
-# create, run and enter the container
-docker run -it --cap-add=SYS_PTRACE --privileged=true --name polardb_pg_single polardb/polardb_pg_local_instance:single bash
+# pull the instance image and run the container
+docker pull polardb/polardb_pg_local_instance:11
+docker run -it --rm polardb/polardb_pg_local_instance:11 psql
 # check
-psql -h 127.0.0.1 -c 'select version();'
+postgres=# SELECT version();
             version
 --------------------------------
  PostgreSQL 11.9 (POLARDB 11.9)
@@ -70,6 +69,10 @@ psql -h 127.0.0.1 -c 'select version();'
 ```
 
 For more advanced deployment way, please refer to [Advanced Deployment](https://apsaradb.github.io/PolarDB-for-PostgreSQL/deploying/deploy.html). Before your deployment, we recommand to figure out the [architecture](https://apsaradb.github.io/PolarDB-for-PostgreSQL/deploying/introduction.html) of PolarDB for PostgreSQL.
+
+## Development
+
+Please refer to [Development Guide](https://apsaradb.github.io/PolarDB-for-PostgreSQL/development/dev-on-docker.html) to compile and development PolarDB for PostgreSQL.
 
 ## Documentation
 
@@ -79,7 +82,7 @@ If you want to explore or develop documentation locally, see [Document Contribut
 
 ## Contributing
 
-You are welcome to make contributions to PolarDB, no matter code or documentation.
+You are welcome to make contributions to PolarDB for PostgreSQL, no matter code or documentation.
 
 Here are the contributors:
 

@@ -531,8 +531,6 @@ extern int		polar_dma_max_standby_wait_delay_size_mb;
 extern char		*polar_partition_recursive_reloptions;
 extern bool		polar_enable_dump_incorrect_checksum_xlog;
 extern bool 	polar_trace_heap_scan_flow;
-extern bool		polar_enable_log_search_path;
-extern bool 	polar_enable_log_parameter_type;
 
 /* POLAR end */
 
@@ -990,6 +988,7 @@ extern int	px_max_slices;
 extern char *polar_px_nodes;
 extern char *polar_px_ignore_function;
 extern PxFunctionOidArray *px_function_oid_array;
+extern bool	px_use_master;
 extern bool	px_use_standby;
 extern bool	polar_px_ignore_unusable_nodes;
 extern bool	polar_enable_send_node_info;
